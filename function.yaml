@@ -114,12 +114,12 @@ spec:
           value: apt update && apt install git python3-pip
 	      - kind: RUN
           value: pip install torch opencv-python-headless pillow pyyaml torchvision
+        - kind: WORKDIR
+          value: /opt/nuclio
         - kind: RUN
           value: git clone https://github.com/YurkevichAndrei/testyolo.git
         - kind: RUN
           value: ln -s ./testyolo/yolo_rgb_weights.pt ./yolo_rgb_weights.pt
-        - kind: WORKDIR
-          value: /opt/nuclio
         - kind: RUN
           value: ln -s /usr/bin/python3 /usr/bin/python
 
