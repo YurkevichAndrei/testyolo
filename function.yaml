@@ -1,0 +1,137 @@
+metadata:
+  name: pth-mis-yolovrgb
+  namespace: cvat
+  annotations:
+    name: YOLO RGB
+    type: detector
+    spec: |
+	[
+	  {
+	    "id": 116,
+	    "name": "TM-62P",
+	    "type": "rectangle"
+	  },
+	  {
+	    "id": 117,
+	    "name": "T-72",
+	    "type": "rectangle"
+	  },
+	  {
+	    "id": 118,
+	    "name": "PFM-1",
+	    "type": "rectangle"
+	  },
+	  {
+	    "id": 119,
+	    "name": "PTM-3",
+	    "type": "rectangle"
+	  },
+	  {
+	    "id": 120,
+	    "name": "POM-2",
+	    "type": "rectangle"
+	  },
+	  {
+	    "id": 121,
+	    "name": "PMN-4",
+	    "type": "rectangle"
+	  },
+	  {
+	    "id": 122,
+	    "name": "PMN-2",
+	    "type": "rectangle"
+	  },
+	  {
+	    "id": 123,
+	    "name": "PMN",
+	    "type": "rectangle"
+	  },
+	  {
+	    "id": 124,
+	    "name": "OZM-72",
+	    "type": "rectangle"
+	  },
+	  {
+	    "id": 125,
+	    "name": "MMG-82",
+	    "type": "rectangle"
+	  },
+	  {
+	    "id": 126,
+	    "name": "VOG-25",
+	    "type": "rectangle"
+	  },
+	  {
+	    "id": 127,
+	    "name": "TS-50",
+	    "type": "rectangle"
+	  },
+	  {
+	    "id": 128,
+	    "name": "TS-6.1",
+	    "type": "rectangle"
+	  },
+	  {
+	    "id": 165,
+	    "name": "TM-62M",
+	    "type": "rectangle"
+	  },
+	  {
+	    "id": 167,
+	    "name": "Dump_big",
+	    "type": "rectangle"
+	  },
+	  {
+	    "id": 168,
+	    "name": "Dump_small",
+	    "type": "rectangle"
+	  },
+	  {
+	    "id": 169,
+	    "name": "Dump_metal",
+	    "type": "rectangle"
+	  },
+	  {
+	    "id": 170,
+	    "name": "MON-50",
+	    "type": "rectangle"
+	  }
+	]
+
+spec:
+  description: YOLO RGB
+  runtime: 'python:3.8'
+  handler: main:handler
+  eventTimeout: 30s
+  
+  build:
+    image: cvat.pth.mis.yolorgb
+    baseImage: ubuntu:22.04
+
+    directives:
+      preCopy:
+        - kind: RUN
+          value: apt update && apt install --no-install-recommends -y wget python3-pip
+	      - kind: RUN
+          value: pip install torch opencv-python-headless pillow pyyaml torchvision
+        - kind: WORKDIR
+          value: /opt/nuclio
+        - kind: RUN
+          value: wget https://disk.yandex.ru/d/mqK7TxyibSSlMA
+        - kind: RUN
+          value: ln -s /usr/bin/python3 /usr/bin/python
+
+  triggers:
+    myHttpTrigger:
+      numWorkers: 2
+      kind: 'http'
+      workerAvailabilityTimeoutMilliseconds: 10000
+      attributes:
+        maxRequestBodySize: 33554432 # 32MB
+
+  platform:
+    attributes:
+      restartPolicy:
+        name: always
+        maximumRetryCount: 3
+      mountMode: volume
