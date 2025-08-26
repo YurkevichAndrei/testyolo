@@ -111,15 +111,17 @@ spec:
     directives:
       preCopy:
         - kind: RUN
-          value: apt update && apt install git python3-pip
-	      - kind: RUN
-          value: pip install torch opencv-python-headless pillow pyyaml torchvision
+          value: apt update && apt install python3-pip
+        - kind: RUN
+          value: pip install torch torchvision opencv-python-headless pillow pyyaml
         - kind: WORKDIR
           value: /opt/nuclio
-        - kind: RUN
-          value: git clone https://github.com/YurkevichAndrei/testyolo.git
-        - kind: RUN
-          value: ln -s ./testyolo/yolo_rgb_weights.pt ./yolo_rgb_weights.pt
+        - kind: COPY
+          value: model_handler.py ./
+        - kind: COPY
+          value: main.py ./
+        - kind: COPY
+          value: yolo_rgb_weights.pt ./
         - kind: RUN
           value: ln -s /usr/bin/python3 /usr/bin/python
 
