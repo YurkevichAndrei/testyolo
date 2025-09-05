@@ -6,24 +6,24 @@ metadata:
     type: detector
     spec: |
       [
-        {"id": 116, "name": "TM-62P", "type": "rectangle"},
-        {"id": 117, "name": "T-72", "type": "rectangle"},
-        {"id": 118, "name": "PFM-1", "type": "rectangle"},
-        {"id": 119, "name": "PTM-3", "type": "rectangle"},
-        {"id": 120, "name": "POM-2", "type": "rectangle"},
-        {"id": 121, "name": "PMN-4", "type": "rectangle"},
-        {"id": 122, "name": "PMN-2", "type": "rectangle"},
-        {"id": 123, "name": "PMN", "type": "rectangle"},
-        {"id": 124, "name": "OZM-72", "type": "rectangle"},
-        {"id": 125, "name": "MMG-82", "type": "rectangle"},
-        {"id": 126, "name": "VOG-25", "type": "rectangle"},
-        {"id": 127, "name": "TS-50", "type": "rectangle"},
-        {"id": 128, "name": "TS-6.1", "type": "rectangle"},
-        {"id": 165, "name": "TM-62M", "type": "rectangle"},
-        {"id": 167, "name": "Dump_big", "type": "rectangle"},
-        {"id": 168, "name": "Dump_small", "type": "rectangle"},
-        {"id": 169, "name": "Dump_metal", "type": "rectangle"},
-        {"id": 170, "name": "MON-50", "type": "rectangle"}
+        {"id": 0, "name": "TM-62P", "type": "rectangle"},
+        {"id": 1, "name": "T-72", "type": "rectangle"},
+        {"id": 2, "name": "PFM-1", "type": "rectangle"},
+        {"id": 3, "name": "PTM-3", "type": "rectangle"},
+        {"id": 4, "name": "POM-2", "type": "rectangle"},
+        {"id": 5, "name": "PMN-4", "type": "rectangle"},
+        {"id": 6, "name": "PMN-2", "type": "rectangle"},
+        {"id": 7, "name": "PMN-1", "type": "rectangle"},
+        {"id": 8, "name": "OZM-72", "type": "rectangle"},
+        {"id": 9, "name": "MMG-82", "type": "rectangle"},
+        {"id": 10, "name": "VOG-25", "type": "rectangle"},
+        {"id": 11, "name": "TS-50", "type": "rectangle"},
+        {"id": 12, "name": "TS-6.1", "type": "rectangle"},
+        {"id": 48, "name": "TM-62M", "type": "rectangle"},
+        {"id": 49, "name": "Dump_big", "type": "rectangle"},
+        {"id": 50, "name": "Dump_small", "type": "rectangle"},
+        {"id": 51, "name": "Dump_metal", "type": "rectangle"},
+        {"id": 52, "name": "MON-50", "type": "rectangle"}
       ]
 
 spec:
@@ -39,13 +39,13 @@ spec:
     directives:
       preCopy:
         - kind: RUN
-          value: apt update && apt install -y python3-pip wget
+          value: apt update && apt install -y python3-pip wget libgl1 libglib2.0-0 libsm6 libxext6 libxrender1
         - kind: RUN
-          value: pip install torch torchvision opencv-python-headless pillow pyyaml
+          value: pip install opencv-python-headless pillow pyyaml ultralytics
         - kind: WORKDIR
           value: /opt/nuclio
         - kind: RUN
-          value: wget https://github.com/YurkevichAndrei/testyolo/releases/download/test/yolo_rgb_weights.pt
+          value: wget https://github.com/YurkevichAndrei/testyolo/releases/download/1/yolo_rgb_weights.pt
         - kind: RUN
           value: ln -s /usr/bin/python3 /usr/bin/python
 
@@ -55,7 +55,8 @@ spec:
       kind: 'http'
       workerAvailabilityTimeoutMilliseconds: 10000
       attributes:
-        maxRequestBodySize: 33554432 # 32MB
+        maxRequestBodySize: 2147483647 # 2048MB
+        port: 30050
 
   platform:
     attributes:
