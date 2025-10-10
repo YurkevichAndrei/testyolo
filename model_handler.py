@@ -16,7 +16,7 @@ class ModelHandler:
         use_sahi: bool = True,
         tile: int = 512,
         overlap: float = 0.20,
-        device: str = "cpu",
+        device: str = "cuda" if torch.cuda.is_available() else "cpu",
         postprocess_type: str = "NMS",
         weights_path: str = "yolo_rgb_weights.pt",
         ):

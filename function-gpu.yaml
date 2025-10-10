@@ -1,8 +1,8 @@
 metadata:
-  name: pth-mis-yolorgb
+  name: pth-mis-yolorgb-gpu
   namespace: cvat
   annotations:
-    name: YOLO RGB
+    name: YOLO RGB GPU
     type: detector
     spec: |
       [
@@ -27,13 +27,16 @@ metadata:
       ]
 
 spec:
-  description: YOLO RGB
+  description: YOLO RGB GPU
   runtime: 'python:3.10'
   handler: main:handler
   eventTimeout: 300s
-  
+  resources:
+    limits:
+      nvidia.com/gpu: 1
+
   build:
-    image: cvat.pth.mis.yolorgb
+    image: cvat.pth.mis.yolorgb.gpu
     baseImage: python:3.10-slim
 
     directives:
@@ -51,7 +54,7 @@ spec:
 
   triggers:
     myHttpTrigger:
-      numWorkers: 2
+      numWorkers: 4
       kind: 'http'
       workerAvailabilityTimeoutMilliseconds: 300000
       attributes:
